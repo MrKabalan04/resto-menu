@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Outfit:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 font-en;
+  }
+
+  [dir="rtl"] {
+    @apply font-ar;
+  }
+}
