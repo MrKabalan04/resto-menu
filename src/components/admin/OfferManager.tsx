@@ -38,7 +38,11 @@ const OfferManager: React.FC = () => {
                 return;
             }
             const data = await res.json();
-            setOffers(Array.isArray(data) ? data : []);
+            if (Array.isArray(data)) {
+                setOffers(data);
+            } else {
+                setOffers([]);
+            }
         } catch (err) {
             console.error(err);
             setOffers([]);

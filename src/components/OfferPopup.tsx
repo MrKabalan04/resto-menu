@@ -26,7 +26,7 @@ const OfferPopup: React.FC = () => {
         fetch('/.netlify/functions/api/offers')
             .then(res => res.json())
             .then((data: Offer[]) => {
-                if (data && data.length > 0) {
+                if (Array.isArray(data) && data.length > 0) {
                     setOffers(data);
                     setHasOffers(true);
                     setIsVisible(true);

@@ -41,9 +41,13 @@ const MenuPage: React.FC = () => {
                 const cats = await catsRes.json();
                 const menuItems = await itemsRes.json();
 
-                setCategories(cats);
-                setItems(menuItems);
-                if (cats.length > 0) setActiveCategory('all');
+                if (Array.isArray(cats)) {
+                    setCategories(cats);
+                    if (cats.length > 0) setActiveCategory('all');
+                }
+                if (Array.isArray(menuItems)) {
+                    setItems(menuItems);
+                }
             } catch (err) {
                 console.error("Error loading menu:", err);
             } finally {

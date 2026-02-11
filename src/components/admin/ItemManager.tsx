@@ -57,8 +57,9 @@ const ItemManager: React.FC = () => {
                 fetch('/.netlify/functions/api/categories'),
                 fetch('/.netlify/functions/api/items')
             ]);
-            setCategories(await catRes.json());
-            setItems(await itemRes.json());
+            const [cats, itemData] = await Promise.all([catRes.json(), itemRes.json()]);
+            if (Array.isArray(cats)) setCategories(cats);
+            if (Array.isArray(itemData)) setItems(itemData);
         } catch (err) { console.error(err); }
     };
 
