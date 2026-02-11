@@ -14,9 +14,19 @@ export const requireAdmin = async (req: Request, res: Response, next: NextFuncti
     }
 
     try {
+        // 1. Check against .env "Master" credentials (useful for bootstrap)
+        const masterUser = process.env.ADMIN_USERNAME;
+        const masterPass = process.env.ADMIN_PASSWORD;
+
+        if (masterUser && masterPass && username === masterUser && password === masterPass) {
+            console.log('Auth success: Master credentials used');
+            return next();
+        }
+
+        // 2. Check against Database
         const admin = await Admin.findOne({ username, password });
         if (admin) {
-            console.log('Auth success');
+            console.log('Auth success: Database credentials used');
             next();
         } else {
             console.log(`Auth failed: Invalid credentials for "${username}"`);

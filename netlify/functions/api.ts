@@ -8,6 +8,7 @@ import categoryRoutes from "./routes/categoryRoutes";
 import itemRoutes from "./routes/itemRoutes";
 import offerRoutes from "./routes/offerRoutes";
 import settingsRoutes from "./routes/settingsRoutes";
+import authRoutes from "./routes/authRoutes";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ router.use("/categories", categoryRoutes);
 router.use("/items", itemRoutes);
 router.use("/offers", offerRoutes);
 router.use("/settings", settingsRoutes);
+router.use("/auth", authRoutes);
 
 app.use("/.netlify/functions/api", router);
 
