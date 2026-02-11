@@ -16,8 +16,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to Database
-connectDB();
+// Database Connection Middleware
+const dbMiddleware = async (req: any, res: any, next: any) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("Database connection error:", error);
+    res.status(500).json({
+      message: "Database connection failed",
+      error: process.env.NODE_ENV === 'development' ? error : undefined
+    });
+  }
+};
+
+app.use(dbMiddleware);
 
 const router = Router();
 
