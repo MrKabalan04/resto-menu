@@ -7,15 +7,15 @@ export default {
     theme: {
         extend: {
             colors: {
-                lava: {
-                    light: '#EF233C',
-                    DEFAULT: '#D90429', // Primary
-                    dark: '#8D0618',
+                bakery: {
+                    light: '#dca67d', // soft terracotta
+                    DEFAULT: '#c48b64', // dusty orange / copper
+                    dark: '#935d39',    // warm brown
                 },
                 dark: {
-                    bg: '#0F0F0F',
-                    card: '#1A1A1A',
-                    text: '#F5F5F5',
+                    bg: '#1A1209',        // Deep warm charcoal
+                    card: '#2A1F12',      // Warm dark brown
+                    text: '#FFF8F0',      // Warm white
                 }
             },
             fontFamily: {

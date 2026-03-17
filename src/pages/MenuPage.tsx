@@ -4,6 +4,9 @@ import MenuItem from '../components/MenuItem';
 import CurrencyToggle from '../components/CurrencyToggle';
 import OfferPopup from '../components/OfferPopup';
 import { useMenu } from '../context/MenuContext';
+import { formatPrice } from '../utils';
+import { Phone, Bike } from 'lucide-react';
+import MenuSkeleton from '../components/MenuSkeleton';
 
 interface Category {
     _id: string;
@@ -19,16 +22,80 @@ interface Item {
     description?: string;
     descriptionAr?: string;
     price: number;
-    priceCurrency?: 'USD' | 'LBP';
+    priceCurrency: 'USD' | 'LBP';
     isAvailable: boolean;
 }
+
+const PizzaItem = ({ pizza, currency, exchangeRate }: { pizza: any, currency: string, exchangeRate: number }) => {
+    const [size, setSize] = useState<'small' | 'large'>('small');
+
+    return (
+        <div className="group flex flex-col gap-4 p-5 bg-gradient-to-br from-white/[0.03] to-transparent rounded-[1.5rem] border border-white/5 hover:border-white/20 transition-all duration-300 shadow-xl hover:shadow-2xl">
+            <div className="flex justify-between items-start">
+                <div className="flex flex-col">
+                    <span className="text-xl md:text-2xl font-bold font-ar text-white group-hover:text-stone-200 transition-colors uppercase whitespace-normal">
+                        {pizza.nameAr}
+                    </span>
+                    <span className="text-[10px] font-en text-stone-500 font-bold uppercase tracking-[0.2em] mt-1 whitespace-normal">
+                        {pizza.name}
+                    </span>
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-4 mt-2">
+                <div className="flex bg-black/40 p-1 rounded-2xl border border-white/5 backdrop-blur-md">
+                    <button
+                        onClick={() => setSize('small')}
+                        className={`px-5 py-2 rounded-xl text-xs font-black transition-all duration-300 ${size === 'small' ? 'bg-white text-black shadow-[0_4px_12px_rgba(255,255,255,0.2)]' : 'text-stone-500 hover:text-white'}`}
+                    >
+                        صغير
+                    </button>
+                    <button
+                        onClick={() => setSize('large')}
+                        className={`px-5 py-2 rounded-xl text-xs font-black transition-all duration-300 ${size === 'large' ? 'bg-white text-black shadow-[0_4px_12px_rgba(255,255,255,0.2)]' : 'text-stone-500 hover:text-white'}`}
+                    >
+                        كبير
+                    </button>
+                </div>
+
+                <div className="flex flex-col items-end">
+                    <div className="text-3xl font-black text-white tabular-nums tracking-tighter">
+                        {formatPrice(size === 'small' ? pizza.smallPrice : pizza.largePrice, currency, exchangeRate, pizza.priceCurrency as "LBP" | "USD").replace('LBP', '').trim()}
+                    </div>
+                    {/* Placeholder for price, if needed for skeleton state, but currently always shows price */}
+                    {/* <div className="h-4 bg-white/10 rounded w-20 ml-4"></div> */}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export const SkeletonPizza: React.FC = () => (
+    <div className="group flex flex-col gap-4 p-5 bg-gradient-to-br from-white/[0.03] to-transparent rounded-[1.5rem] border border-white/5 animate-pulse">
+        <div className="flex justify-between items-start">
+            <div className="flex flex-col">
+                <div className="h-6 bg-white/10 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-white/5 rounded w-1/2"></div>
+            </div>
+        </div>
+        <div className="flex items-center justify-between gap-4 mt-2">
+            <div className="flex bg-black/40 p-1 rounded-2xl border border-white/5 backdrop-blur-md">
+                <div className="px-5 py-2 rounded-xl text-xs font-black bg-white/10 w-16 h-8"></div>
+                <div className="px-5 py-2 rounded-xl text-xs font-black bg-white/5 w-16 h-8 ml-1"></div>
+            </div>
+            <div className="flex flex-col items-end">
+                <div className="h-8 bg-white/10 rounded w-20"></div>
+            </div>
+        </div>
+    </div>
+);
 
 const MenuPage: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [items, setItems] = useState<Item[]>([]);
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [loading, setLoading] = useState(true);
-    const { language } = useMenu();
+    const { language, currency, exchangeRate } = useMenu();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,7 +110,6 @@ const MenuPage: React.FC = () => {
 
                 if (Array.isArray(cats)) {
                     setCategories(cats);
-                    if (cats.length > 0) setActiveCategory('all');
                 }
                 if (Array.isArray(menuItems)) {
                     setItems(menuItems);
@@ -54,53 +120,111 @@ const MenuPage: React.FC = () => {
                 setLoading(false);
             }
         };
+
         fetchData();
+        const intervalId = setInterval(fetchData, 5000);
+        return () => clearInterval(intervalId);
     }, []);
 
     const availableItems = items.filter(i => i.isAvailable);
-    const filteredItems = activeCategory === 'all'
-        ? availableItems
-        : availableItems.filter(item => item.categoryId === activeCategory);
+    const transformedItems = availableItems; // Database is now seeded correctly
 
+    const categoryMap = {
+        manaqish: categories.find(c => c.nameAr === 'مناقيش')?._id || '',
+        pizza: categories.find(c => c.nameAr === 'بيتزا')?._id || '',
+        sub: categories.find(c => c.nameAr === 'ساب')?._id || '',
+        pastries: categories.find(c => c.nameAr === 'معجنات')?._id || '',
+        sweet: categories.find(c => c.nameAr === 'صار فيك تتحلا عنا')?._id || '',
+        drinks: categories.find(c => c.nameAr === 'مرطبات')?._id || '',
+    };
+
+    const getItemsByCategory = (categoryId: string) => {
+        if (categoryId === 'all') return transformedItems;
+        return transformedItems.filter(item => item.categoryId === categoryId);
+    };
+
+    // Pizza specific grouping
+    const pizzaItems = getItemsByCategory(categoryMap.pizza || '');
+    const pizzas = pizzaItems.reduce((acc: Record<string, { name: string, nameAr: string, smallPrice: number, largePrice: number, priceCurrency: 'USD' | 'LBP' }>, item: Item) => {
+        const isLarge = item.nameAr.includes('كبير');
+        const baseNameAr = item.nameAr.replace(' صغير', '').replace(' كبير', '');
+        const baseNameEn = item.name.replace(' (Small)', '').replace(' (Large)', '');
+
+        if (!acc[baseNameAr]) {
+            acc[baseNameAr] = { name: baseNameEn, nameAr: baseNameAr, smallPrice: 0, largePrice: 0, priceCurrency: item.priceCurrency };
+        }
+        if (isLarge) {
+            acc[baseNameAr].largePrice = item.price;
+        } else {
+            acc[baseNameAr].smallPrice = item.price;
+        }
+        acc[baseNameAr].priceCurrency = item.priceCurrency; // Ensure it matches
+        return acc;
+    }, {} as Record<string, { name: string, nameAr: string, smallPrice: number, largePrice: number, priceCurrency: 'USD' | 'LBP' }>);
     if (loading) return (
-        <div className="min-h-screen flex items-center justify-center text-lava font-bold animate-pulse">
-            Loading Lava Resto...
+        <div className="relative">
+            <MenuSkeleton />
+            <div className="fixed inset-0 flex flex-col items-center justify-center z-[60] bg-black/20 backdrop-blur-sm">
+                <div className="flex flex-col items-center gap-4 bg-zinc-950/80 p-8 rounded-3xl border border-white/5 shadow-2xl">
+                    <div className="text-2xl font-bold tracking-[0.3em] uppercase animate-pulse text-white">Loading...</div>
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="text-stone-300 font-bold tracking-widest uppercase text-base">
+                            Powered by Mr Kabalan
+                        </div>
+                        <div className="text-stone-500 font-bold tracking-widest text-base">
+                            +961 3 562 190
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 
     return (
-        <div className="min-h-screen pb-20">
-            {/* Header */}
-            <header className="bg-lava text-white p-6 shadow-md text-center relative">
-                <h1 className="font-heading font-extrabold text-3xl tracking-tight">LAVA RESTAURANT</h1>
-                <div className="flex justify-center gap-4 mt-2">
-                    <a
-                        href="https://wa.me/96178907910"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white/80 hover:text-white transition-colors"
-                        title="WhatsApp"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                        </svg>
-                    </a>
-                    <a
-                        href="https://www.instagram.com/lava_leb/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white/80 hover:text-white transition-colors"
-                        title="Instagram"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                        </svg>
-                    </a>
+        <div className="min-h-screen pb-24 chalkboard-bg text-stone-100 font-en relative overflow-x-hidden">
+            {/* Master Fixed Header */}
+            <header className="fixed top-0 left-0 right-0 z-[100] bg-black border-b border-white/5 pt-4 pb-4 px-4 text-center">
+                <div className="container mx-auto max-w-7xl relative px-4 text-center flex flex-col items-center">
+                    {/* Big Prominent Logo */}
+                    <div className="inline-block relative">
+                        <div className="absolute inset-0 bg-white/5 blur-[60px] rounded-full"></div>
+                        <img
+                            src="/logo_ASSILL.jpeg"
+                            alt="فرن الأصيل"
+                            className="w-full max-w-[150px] sm:max-w-[220px] md:max-w-[380px] lg:max-w-[420px] h-auto object-contain rounded-[1.5rem] border border-white/10 shadow-[0_0_60px_rgba(255,255,255,0.05)] relative z-10 mx-auto bg-black"
+                        />
+                    </div>
+
+                    {/* Branding Info */}
+                    <div className="mt-4 flex flex-col items-center gap-3">
+                        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
+                            <div className="border border-white/20 px-4 py-1.5 rounded-full font-bold text-white/60 text-[9px] md:text-xs tracking-[0.3em] uppercase bg-black/40 backdrop-blur-md">
+                                24 / 24
+                            </div>
+                            <div className="flex items-center gap-3 text-white/40 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase">
+                                <Bike size={18} className="text-white/20" />
+                                <span>Free Delivery</span>
+                                <div className="w-px h-3 bg-white/10 mx-1"></div>
+                                <a
+                                    href="https://wa.me/96109543933"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 text-[#25D366] hover:text-[#20ba59] transition-colors"
+                                >
+                                    <Phone size={18} />
+                                    <span className="hidden sm:inline">Order</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            {/* Category Nav - Sticky */}
-            <div className="sticky top-0 z-50 bg-white shadow-sm">
+            {/* Spacer to prevent content overlap with fixed header */}
+            <div className="h-[115px] sm:h-[135px] md:h-[240px] lg:h-[260px]"></div>
+
+            {/* Category Nav - Mobile Only - Fixed below header */}
+            <div className="md:hidden fixed top-[115px] left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/10 font-ar">
                 <CategoryList
                     categories={categories}
                     activeCategory={activeCategory}
@@ -108,29 +232,145 @@ const MenuPage: React.FC = () => {
                 />
             </div>
 
-            {/* Menu Grid */}
-            <main className="container mx-auto px-4 py-8 max-w-3xl space-y-6">
-                <div className="flex items-center gap-4 mb-6">
-                    <h2 className="text-2xl font-heading font-bold text-lava uppercase tracking-wide whitespace-nowrap">
-                        {activeCategory === 'all' ? (language === 'en' ? 'All Menu' : 'القائمة كاملة') : categories.find(c => c._id === activeCategory)?.name}
-                    </h2>
-                    <div className="h-px bg-lava/10 flex-1"></div>
-                </div>
+            {/* Mobile spacer for fixed categories */}
+            <div className="md:hidden h-[60px]"></div>
 
-                <div className="grid gap-6">
-                    {filteredItems.map(item => (
-                        <MenuItem
-                            key={item._id}
-                            {...item}
-                        />
-                    ))}
-                </div>
+            {/* Menu Sections Grid */}
+            <main className="container mx-auto px-4 max-w-7xl">
+                {activeCategory === 'all' ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
 
-                {filteredItems.length === 0 && !loading && (
-                    <div className="text-center py-12 text-gray-400">
-                        {language === 'en' ? 'No items found in this section' : 'لا يوجد عناصر في هذا القسم'}
+                        {/* Right Column in Arabic -> Will visually be first in RTL if we used RTL on grid, but we'll manually order it: 
+                            Visually the user wants Manaqish on Right. 
+                            In LTR grid, [Col 1, Col 2, Col 3]. If we want Manaqish on Right, it's Col 3.
+                            But for mobile stacking, we want Manaqish first. Let's use flex-col on mobile, and order classes.
+                        */}
+
+                        {/* Column 1: Pastries (Left) */}
+                        <div className="order-3 md:order-1 space-y-10">
+                            <section>
+                                <h2 className="text-2xl md:text-3xl font-bold font-ar text-center mb-6 text-white pb-4 border-b border-white/10 uppercase tracking-widest">
+                                    معجنات
+                                </h2>
+                                <div className="space-y-1">
+                                    {getItemsByCategory(categoryMap.pastries || '').map((item: Item) => (
+                                        <MenuItem key={item._id} {...item} />
+                                    ))}
+                                </div>
+                            </section>
+                            <section>
+                                <h2 className="text-2xl md:text-3xl font-bold font-ar text-center mb-6 text-white pb-4 border-b border-white/10 uppercase tracking-widest bg-white/5 py-2 rounded-lg mt-8">
+                                    صار فيك تتحلا عنا
+                                </h2>
+                                <div className="space-y-1">
+                                    {getItemsByCategory(categoryMap.sweet || '').map((item: Item) => (
+                                        <MenuItem key={item._id} {...item} />
+                                    ))}
+                                </div>
+                            </section>
+
+                            {/* Extras block matching picture for mobile stack order, but on desktop it's bottom left */}
+                            <div className="pt-8">
+                                <div className="glass-card-dark rounded-2xl p-6 text-center border-2 border-white/20">
+                                    <h3 className="font-ar font-bold text-xl mb-4 text-white">إضافات</h3>
+                                    <div className="flex justify-between items-center text-lg mb-3">
+                                        <span className="font-en font-bold">ADD EXTRA</span>
+                                        <span className="font-bold tabular-nums text-white">50.000</span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-lg">
+                                        <span className="font-ar font-bold text-stone-300">عجين أسمر للريجيم</span>
+                                        <span className="font-bold tabular-nums text-white">50.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Column 2: Pizza, Sub, Drinks (Middle) */}
+                        <div className="order-2 md:order-2 space-y-10">
+                            <section>
+                                <h2 className="text-2xl md:text-3xl font-bold font-ar text-center mb-6 text-white pb-4 border-b border-white/10 uppercase tracking-widest whitespace-normal">
+                                    بيتزا
+                                </h2>
+                                <div className="grid grid-cols-1 gap-4">
+                                    {Object.values(pizzas).map((pizza, idx) => (
+                                        <PizzaItem key={idx} pizza={pizza} currency={currency} exchangeRate={exchangeRate} />
+                                    ))}
+                                </div>
+                            </section>
+
+                            <section>
+                                <h2 className="text-xl md:text-2xl font-bold font-ar text-center mb-4 text-white pb-2 border-b border-white/10 uppercase tracking-widest mt-12 whitespace-normal">
+                                    ساب
+                                </h2>
+                                <div className="space-y-1">
+                                    {getItemsByCategory(categoryMap.sub || '').map((item: Item) => (
+                                        <MenuItem key={item._id} {...item} />
+                                    ))}
+                                </div>
+                            </section>
+
+                            <section className="bg-white/5 rounded-2xl p-6 mt-12 overflow-hidden">
+                                <h2 className="text-2xl md:text-3xl font-bold font-ar text-center mb-6 text-white pb-4 border-b border-white/10 uppercase tracking-widest">
+                                    مرطبات
+                                </h2>
+                                <div className="space-y-1">
+                                    {getItemsByCategory(categoryMap.drinks || '').map((item: Item) => (
+                                        <MenuItem key={item._id} {...item} />
+                                    ))}
+                                </div>
+                            </section>
+                        </div>
+
+                        {/* Column 3: Manaqish (Right) */}
+                        <div className="order-1 md:order-3">
+                            <h2 className="text-3xl md:text-4xl font-bold font-ar text-center mb-8 text-white pb-4 border-b border-white/20 uppercase tracking-widest whitespace-normal">
+                                مناقيش
+                            </h2>
+                            {getItemsByCategory(categoryMap.manaqish || '').map((item: Item) => (
+                                <MenuItem key={item._id} {...item} />
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="max-w-2xl mx-auto space-y-1 animate-in fade-in duration-300">
+                        {activeCategory === categoryMap.pizza ? (
+                            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {Object.values(pizzas).map((pizza, idx) => (
+                                        <PizzaItem key={idx} pizza={pizza} currency={currency} exchangeRate={exchangeRate} />
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            getItemsByCategory(activeCategory).map((item: Item) => (
+                                <MenuItem key={item._id} {...item} />
+                            ))
+                        )}
+
+                        {getItemsByCategory(activeCategory).length === 0 && activeCategory !== categoryMap.pizza && (
+                            <div className="text-center py-16 text-stone-500">
+                                <div className="text-5xl mb-3 opacity-50">🍽️</div>
+                                {language === 'en' ? 'No items found' : 'لا يوجد عناصر'}
+                            </div>
+                        )}
                     </div>
                 )}
+
+                {/* Extra Add-ons */}
+                <div className="mt-16 mb-8 flex flex-wrap justify-center gap-6 md:gap-12">
+                    <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-dashed border-white/20 flex flex-col items-center justify-center text-center p-4 bg-white/5 animate-pulse-subtle">
+                        <span className="text-[10px] md:text-xs font-bold text-stone-500 uppercase tracking-widest mb-1">ADD</span>
+                        <span className="text-lg md:text-xl font-bold text-white leading-tight">EXTRA</span>
+                        <div className="h-px w-8 bg-white/20 my-2"></div>
+                        <span className="text-sm md:text-md font-bold text-stone-300">50.000</span>
+                    </div>
+
+                    <div className="w-44 h-44 md:w-52 md:h-52 rounded-full border-2 border-white/20 flex flex-col items-center justify-center text-center p-6 bg-white/5 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+                        <span className="text-xl md:text-2xl font-bold font-ar text-white/90 leading-tight mb-2">عجين أسمر<br />للريجيم</span>
+                        <div className="h-px w-12 bg-white/20 my-2"></div>
+                        <span className="text-lg md:text-xl font-bold text-stone-200">50.000</span>
+                    </div>
+                </div>
             </main>
 
             <CurrencyToggle />

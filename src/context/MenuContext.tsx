@@ -18,7 +18,7 @@ const MenuContext = createContext<MenuContextType | undefined>(undefined);
 
 export const MenuProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [language, setLanguage] = useState<Language>('en');
-    const [currency, setCurrency] = useState<Currency>('USD');
+    const [currency, setCurrency] = useState<Currency>('LBP');
     const [exchangeRate, setExchangeRate] = useState<number>(89500); // Default, will fetch from API
 
     const toggleLanguage = () => setLanguage(prev => prev === 'en' ? 'ar' : 'en');

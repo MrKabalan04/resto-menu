@@ -87,90 +87,103 @@ const SettingsManager: React.FC = () => {
     return (
         <div className="space-y-6">
             {/* General Settings */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-bold mb-4">General Settings</h2>
+            <div className="bg-[#111] border border-white/5 rounded-2xl shadow-sm p-4 md:p-6 text-stone-200">
+                <h2 className="text-xl font-bold mb-6 text-white">General Settings</h2>
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Restaurant Name</label>
+                        <label className="block text-sm font-bold text-stone-400 mb-1">Restaurant Name</label>
                         <input
                             value={name}
                             onChange={e => setName(e.target.value)}
-                            className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 bg-[#1a1a1a] text-white rounded-lg focus:ring-1 focus:ring-white focus:border-white outline-none transition-all placeholder-stone-600"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Exchange Rate (1 USD = ? LBP)</label>
+                        <label className="block text-sm font-bold text-stone-400 mb-1">Exchange Rate (1 USD = ? LBP)</label>
                         <input
-                            type="number"
-                            value={rate}
-                            onChange={e => setRate(Number(e.target.value))}
-                            className="w-full p-3 border border-gray-200 rounded-lg font-mono focus:ring-2 focus:ring-lava focus:border-transparent"
+                            type="text"
+                            value={rate === 0 ? '' : rate}
+                            onChange={e => {
+                                const val = e.target.value;
+                                if (val === '') {
+                                    setRate(0);
+                                } else {
+                                    const numVal = Number(val);
+                                    if (!isNaN(numVal)) setRate(numVal);
+                                }
+                            }}
+                            placeholder="0"
+                            className="w-full p-3 border border-stone-800 bg-[#1a1a1a] text-white rounded-lg font-mono focus:ring-1 focus:ring-white focus:border-white outline-none transition-all placeholder-stone-600"
                         />
                     </div>
 
-                    <button
-                        onClick={handleSave}
-                        disabled={loading}
-                        className="bg-lava text-white px-6 py-2.5 rounded-lg font-bold hover:bg-red-700 flex items-center justify-center gap-2 transition-colors"
-                    >
-                        <Save size={18} /> Save Changes
-                    </button>
+                    <div className="pt-2">
+                        <button
+                            onClick={handleSave}
+                            disabled={loading}
+                            className="bg-white text-black px-6 py-2.5 rounded-lg font-bold hover:bg-stone-200 flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] disabled:opacity-50 w-full sm:w-auto"
+                        >
+                            <Save size={18} /> Save Changes
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {/* Admin Credentials */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
-                    <Key size={20} className="text-lava" />
+            <div className="bg-[#111] border border-white/5 rounded-2xl shadow-sm p-4 md:p-6 text-stone-200">
+                <h2 className="text-xl font-bold mb-2 flex items-center gap-2 text-white">
+                    <Key size={20} className="text-stone-400" />
                     Admin Credentials
                 </h2>
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="text-sm text-stone-500 mb-6">
                     Update your login credentials. Changes here update localStorage only. Remember to update server environment variables.
                 </p>
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-bold text-stone-400 mb-1">
                             <User size={14} className="inline mr-1" /> Username
                         </label>
                         <input
                             type="text"
                             value={newUsername}
                             onChange={e => setNewUsername(e.target.value)}
-                            className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 bg-[#1a1a1a] text-white rounded-lg focus:ring-1 focus:ring-white focus:border-white outline-none transition-all placeholder-stone-600"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                        <label className="block text-sm font-bold text-stone-400 mb-1">New Password</label>
                         <input
                             type="password"
                             value={newPassword}
                             onChange={e => setNewPassword(e.target.value)}
                             placeholder="Leave blank to keep current"
-                            className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 bg-[#1a1a1a] text-white rounded-lg focus:ring-1 focus:ring-white focus:border-white outline-none transition-all placeholder-stone-600"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                        <label className="block text-sm font-bold text-stone-400 mb-1">Confirm New Password</label>
                         <input
                             type="password"
                             value={confirmPassword}
                             onChange={e => setConfirmPassword(e.target.value)}
                             placeholder="Confirm new password"
-                            className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 bg-[#1a1a1a] text-white rounded-lg focus:ring-1 focus:ring-white focus:border-white outline-none transition-all placeholder-stone-600"
                         />
                     </div>
 
-                    <button
-                        onClick={handleUpdateCredentials}
-                        className="bg-gray-800 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-gray-900 flex items-center justify-center gap-2 transition-colors"
-                    >
-                        <Key size={18} /> Update Credentials
-                    </button>
+                    <div className="pt-2">
+                        <button
+                            onClick={handleUpdateCredentials}
+                            className="bg-stone-800 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-stone-700 flex items-center justify-center gap-2 transition-colors border border-stone-700 hover:border-stone-500 w-full sm:w-auto"
+                        >
+                            <Key size={18} /> Update Credentials
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -112,32 +112,32 @@ const CategoryManager: React.FC = () => {
     };
 
     return (
-        <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <Tag size={22} className="text-lava" />
+        <div className="bg-[#111] border border-white/5 rounded-2xl shadow-sm p-4 md:p-6 w-full overflow-hidden text-stone-200">
+            <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-white">
+                <Tag size={22} className="text-stone-400" />
                 Manage Categories
             </h2>
 
             {/* Add Form */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl mb-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-700 mb-4">➕ Add New Category</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label className="text-sm font-bold text-gray-700 mb-1 block">Name (English) *</label>
+            <div className="bg-[#1a1a1a] p-4 md:p-6 rounded-2xl mb-6 border border-white/5 w-full overflow-hidden">
+                <h3 className="font-semibold text-stone-300 mb-4">➕ Add New Category</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div className="w-full">
+                        <label className="text-sm font-bold text-stone-400 mb-1 block">Name (English) *</label>
                         <input
                             placeholder="e.g. Appetizers"
                             value={newName}
                             onChange={e => setNewName(e.target.value)}
-                            className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 bg-[#111] text-white rounded-lg focus:ring-1 focus:ring-white focus:border-white outline-none placeholder-stone-600 transition-all"
                         />
                     </div>
-                    <div>
-                        <label className="text-sm font-bold text-gray-700 mb-1 block">Name (Arabic) *</label>
+                    <div className="w-full">
+                        <label className="text-sm font-bold text-stone-400 mb-1 block">Name (Arabic) *</label>
                         <input
                             placeholder="مثال: مقبلات"
                             value={newNameAr}
                             onChange={e => setNewNameAr(e.target.value)}
-                            className="w-full p-3 border border-gray-200 rounded-lg text-right focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 bg-[#111] text-white rounded-lg text-right focus:ring-1 focus:ring-white focus:border-white outline-none placeholder-stone-600 transition-all"
                             dir="rtl"
                         />
                     </div>
@@ -145,7 +145,7 @@ const CategoryManager: React.FC = () => {
                 <button
                     onClick={handleAdd}
                     disabled={loading || !newName || !newNameAr}
-                    className="bg-lava text-white px-6 py-2.5 rounded-lg font-bold hover:bg-red-700 flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
+                    className="bg-white text-black px-6 py-2.5 rounded-lg font-bold hover:bg-stone-200 flex items-center justify-center gap-2 disabled:opacity-50 transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                 >
                     <Plus size={18} /> Add Category
                 </button>
@@ -153,29 +153,29 @@ const CategoryManager: React.FC = () => {
 
             {/* Categories List */}
             <div className="space-y-3">
-                <div className="text-sm text-gray-500 mb-2">
+                <div className="text-sm text-stone-500 mb-2">
                     {categories.length} categories total
                 </div>
 
                 {categories.map((cat, index) => (
                     <div
                         key={cat._id}
-                        className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow"
+                        className="bg-[#1a1a1a] border border-white/5 rounded-xl p-4 hover:border-white/20 transition-all"
                     >
                         {editingId === cat._id ? (
                             /* Edit Mode */
-                            <div className="space-y-3">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="space-y-3 w-full">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
                                     <input
                                         value={editName}
                                         onChange={e => setEditName(e.target.value)}
-                                        className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent"
+                                        className="w-full p-2 border border-stone-800 bg-[#111] text-white rounded-lg focus:ring-1 focus:ring-white focus:border-white outline-none"
                                         placeholder="English name"
                                     />
                                     <input
                                         value={editNameAr}
                                         onChange={e => setEditNameAr(e.target.value)}
-                                        className="p-2 border border-gray-300 rounded-lg text-right focus:ring-2 focus:ring-lava focus:border-transparent"
+                                        className="w-full p-2 border border-stone-800 bg-[#111] text-white rounded-lg text-right focus:ring-1 focus:ring-white focus:border-white outline-none"
                                         dir="rtl"
                                         placeholder="Arabic name"
                                     />
@@ -183,13 +183,13 @@ const CategoryManager: React.FC = () => {
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => handleSaveEdit(cat._id)}
-                                        className="flex items-center gap-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                                        className="flex items-center gap-1 px-4 py-2 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-lg hover:bg-emerald-600/30 transition-colors font-medium text-sm"
                                     >
                                         <Check size={16} /> Save
                                     </button>
                                     <button
                                         onClick={handleCancelEdit}
-                                        className="flex items-center gap-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                                        className="flex items-center gap-1 px-4 py-2 bg-stone-800 text-stone-300 rounded-lg hover:bg-stone-700 transition-colors font-medium text-sm"
                                     >
                                         <X size={16} /> Cancel
                                     </button>
@@ -199,24 +199,24 @@ const CategoryManager: React.FC = () => {
                             /* View Mode */
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 <div className="flex items-center gap-4 flex-1">
-                                    <div className="w-8 h-8 bg-lava/10 text-lava rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm">
+                                    <div className="w-8 h-8 bg-white/10 text-white rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm">
                                         {index + 1}
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:gap-4 flex-1 min-w-0">
-                                        <span className="font-semibold text-gray-900 truncate">{cat.name}</span>
-                                        <span className="text-gray-600 sm:text-right font-ar" dir="rtl">{cat.nameAr}</span>
+                                        <span className="font-semibold text-stone-200 truncate">{cat.name}</span>
+                                        <span className="text-stone-400 sm:text-right font-ar" dir="rtl">{cat.nameAr}</span>
                                     </div>
                                 </div>
-                                <div className="flex gap-2 sm:ml-4 justify-end border-t sm:border-t-0 pt-3 sm:pt-0">
+                                <div className="flex gap-2 sm:ml-4 justify-end border-t border-white/5 sm:border-t-0 pt-3 sm:pt-0">
                                     <button
                                         onClick={() => handleEdit(cat)}
-                                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-400 hover:bg-blue-950/50 rounded-lg transition-colors"
                                     >
                                         <Edit2 size={16} /> Edit
                                     </button>
                                     <button
                                         onClick={() => handleDelete(cat._id, cat.name)}
-                                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-red-400 hover:bg-red-950/50 rounded-lg transition-colors"
                                     >
                                         <Trash2 size={16} /> Delete
                                     </button>
@@ -227,7 +227,7 @@ const CategoryManager: React.FC = () => {
                 ))}
 
                 {categories.length === 0 && (
-                    <div className="text-center py-12 text-gray-400">
+                    <div className="text-center py-12 text-stone-500">
                         No categories yet. Add your first category above!
                     </div>
                 )}

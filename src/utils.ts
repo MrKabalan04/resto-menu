@@ -1,4 +1,4 @@
-export const formatPrice = (price: number, displayCurrency: 'USD' | 'LBP', rate: number, baseCurrency: 'USD' | 'LBP' = 'USD'): string => {
+export const formatPrice = (price: number, displayCurrency: string, rate: number, baseCurrency: string = 'USD'): string => {
     let finalPrice = price;
 
     if (baseCurrency === 'USD' && displayCurrency === 'LBP') {

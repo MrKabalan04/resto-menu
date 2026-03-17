@@ -36,7 +36,7 @@ app.use(dbMiddleware);
 const router = Router();
 
 router.get("/", (req, res) => {
-  res.json({ message: "Welcome to Lava Resto API" });
+  res.json({ message: "Welcome to Forn El-Assil API" });
 });
 
 router.use("/categories", categoryRoutes);

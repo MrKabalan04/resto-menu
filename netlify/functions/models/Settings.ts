@@ -7,7 +7,7 @@ export interface ISettings extends Document {
 }
 
 const SettingsSchema = new Schema({
-    restaurantName: { type: String, default: 'Lava Resto' },
+    restaurantName: { type: String, default: 'فرن الأصيل' },
     currencySymbol: { type: String, default: '$' },
     lbpRate: { type: Number, default: 89500 }, // Default LBP Rate
 }, { timestamps: true });

@@ -78,39 +78,40 @@ const AdminPage: React.FC = () => {
 
     if (!isAuthenticated) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 p-4">
-                <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm">
-                    <div className="flex justify-center mb-6 text-lava">
-                        <div className="bg-lava/10 p-4 rounded-full">
+            <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-4 font-en relative overflow-hidden">
+                <div className="absolute inset-0 bg-white/5 blur-3xl rounded-full"></div>
+                <div className="bg-[#1a1a1a] p-8 rounded-2xl shadow-2xl border border-white/10 w-full max-w-sm relative z-10">
+                    <div className="flex justify-center mb-6 text-black">
+                        <div className="bg-white p-4 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                             <Lock size={32} />
                         </div>
                     </div>
-                    <h2 className="text-2xl font-bold text-center mb-2">Admin Login</h2>
-                    <p className="text-gray-500 text-center text-sm mb-6">POWERED BY MR KABALAN</p>
+                    <h2 className="text-2xl font-bold text-center mb-2 text-white">Admin Login</h2>
+                    <p className="text-stone-500 text-center text-sm mb-6 uppercase tracking-widest">Powered by Mr Kabalan</p>
 
                     {error && (
-                        <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4">
+                        <div className="bg-red-950/50 border border-red-500/50 text-red-400 p-3 rounded-lg text-sm mb-4">
                             {error}
                         </div>
                     )}
 
                     <div className="space-y-4">
                         <div className="relative">
-                            <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500" />
                             <input
                                 type="text"
                                 placeholder="Username"
-                                className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent outline-none"
+                                className="w-full p-3 pl-10 border border-white/10 rounded-lg bg-[#111] text-white focus:ring-1 focus:ring-white focus:border-white outline-none placeholder-stone-600 transition-all"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
                         <div className="relative">
-                            <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500" />
                             <input
                                 type="password"
                                 placeholder="Password"
-                                className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent outline-none"
+                                className="w-full p-3 pl-10 border border-white/10 rounded-lg bg-[#111] text-white focus:ring-1 focus:ring-white focus:border-white outline-none placeholder-stone-600 transition-all"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
@@ -118,7 +119,7 @@ const AdminPage: React.FC = () => {
                         </div>
                         <button
                             onClick={handleLogin}
-                            className="w-full bg-lava text-white font-bold py-3 rounded-lg hover:bg-red-700 transition-colors"
+                            className="w-full bg-white text-black font-bold py-3 rounded-lg hover:bg-stone-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                         >
                             Login
                         </button>
@@ -129,23 +130,23 @@ const AdminPage: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex">
+        <div className="min-h-screen bg-[#0a0a0a] flex font-en text-stone-200">
             {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-md z-10 hidden md:flex md:flex-col">
-                <div className="p-6 border-b">
-                    <h1 className="text-2xl font-extrabold text-lava">Admin Panel</h1>
-                    <p className="text-xs text-gray-500 mt-1">Welcome, {username}</p>
+            <aside className="w-64 bg-[#111] border-r border-white/5 z-10 hidden md:flex md:flex-col shadow-2xl">
+                <div className="p-6 border-b border-white/5">
+                    <h1 className="text-2xl font-extrabold text-white">Admin Panel</h1>
+                    <p className="text-xs text-stone-500 mt-1">Welcome, <span className="text-stone-300">{username}</span></p>
                 </div>
-                <nav className="mt-4 flex-1">
+                <nav className="mt-4 flex-1 space-y-1 py-2">
                     <AdminNavItem icon={<Tag />} label="Categories" active={activeTab === 'categories'} onClick={() => setActiveTab('categories')} />
                     <AdminNavItem icon={<Utensils />} label="Menu Items" active={activeTab === 'items'} onClick={() => setActiveTab('items')} />
                     <AdminNavItem icon={<Gift />} label="Offers" active={activeTab === 'offers'} onClick={() => setActiveTab('offers')} />
                     <AdminNavItem icon={<Settings />} label="Settings" active={activeTab === 'settings'} onClick={() => setActiveTab('settings')} />
                 </nav>
-                <div className="p-4 border-t">
+                <div className="p-4 border-t border-white/5">
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2 text-red-400 hover:bg-red-950/30 rounded-lg transition-colors border border-transparent hover:border-red-900/50"
                     >
                         <LogOut size={18} />
                         <span className="font-medium">Logout</span>
@@ -154,20 +155,20 @@ const AdminPage: React.FC = () => {
             </aside>
 
             {/* Mobile Nav Header */}
-            <div className="md:hidden fixed top-0 w-full bg-white shadow-sm z-20 flex justify-between p-4 items-center">
-                <h1 className="text-xl font-bold text-lava">Admin</h1>
+            <div className="md:hidden fixed top-0 w-full bg-[#111]/90 backdrop-blur-md border-b border-white/5 shadow-md z-20 flex justify-between p-4 items-center">
+                <h1 className="text-xl font-bold text-white">Admin</h1>
                 <div className="flex gap-2 items-center">
-                    <button onClick={() => setActiveTab('categories')} className={`p-2 rounded ${activeTab === 'categories' ? 'bg-lava text-white' : 'bg-gray-100'}`}><Tag size={20} /></button>
-                    <button onClick={() => setActiveTab('items')} className={`p-2 rounded ${activeTab === 'items' ? 'bg-lava text-white' : 'bg-gray-100'}`}><Utensils size={20} /></button>
-                    <button onClick={() => setActiveTab('offers')} className={`p-2 rounded ${activeTab === 'offers' ? 'bg-lava text-white' : 'bg-gray-100'}`}><Gift size={20} /></button>
-                    <button onClick={() => setActiveTab('settings')} className={`p-2 rounded ${activeTab === 'settings' ? 'bg-lava text-white' : 'bg-gray-100'}`}><Settings size={20} /></button>
-                    <button onClick={handleLogout} className="p-2 rounded bg-red-50 text-red-600"><LogOut size={20} /></button>
+                    <button onClick={() => setActiveTab('categories')} className={`p-2 rounded-lg transition-colors ${activeTab === 'categories' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-stone-400 border border-white/5'}`}><Tag size={18} /></button>
+                    <button onClick={() => setActiveTab('items')} className={`p-2 rounded-lg transition-colors ${activeTab === 'items' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-stone-400 border border-white/5'}`}><Utensils size={18} /></button>
+                    <button onClick={() => setActiveTab('offers')} className={`p-2 rounded-lg transition-colors ${activeTab === 'offers' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-stone-400 border border-white/5'}`}><Gift size={18} /></button>
+                    <button onClick={() => setActiveTab('settings')} className={`p-2 rounded-lg transition-colors ${activeTab === 'settings' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-stone-400 border border-white/5'}`}><Settings size={18} /></button>
+                    <button onClick={handleLogout} className="p-2 rounded-lg bg-red-950/30 text-red-500 ml-1 border border-red-900/30"><LogOut size={18} /></button>
                 </div>
             </div>
 
             {/* Main Content */}
-            <main className="flex-1 p-6 md:p-10 pt-20 md:pt-10 min-h-screen">
-                <div className="max-w-4xl mx-auto">
+            <main className="flex-1 p-4 md:p-10 pt-24 md:pt-10 min-h-screen w-full overflow-hidden">
+                <div className="w-full max-w-4xl mx-auto overflow-hidden">
                     {activeTab === 'categories' && <CategoryManager />}
                     {activeTab === 'items' && <ItemManager />}
                     {activeTab === 'offers' && <OfferManager />}
@@ -181,10 +182,10 @@ const AdminPage: React.FC = () => {
 const AdminNavItem: React.FC<{ icon: React.ReactNode, label: string, active: boolean, onClick: () => void }> = ({ icon, label, active, onClick }) => (
     <button
         onClick={onClick}
-        className={`w-full flex items-center gap-3 px-6 py-4 transition-colors ${active ? 'bg-lava/10 text-lava border-r-4 border-lava' : 'text-gray-500 hover:bg-gray-50'}`}
+        className={`w-full flex items-center gap-3 px-6 py-3.5 transition-all ${active ? 'bg-white/5 text-white border-r-4 border-white font-bold' : 'text-stone-400 hover:text-stone-200 hover:bg-white/5'}`}
     >
         {icon}
-        <span className="font-medium">{label}</span>
+        <span className="font-medium text-sm tracking-wide">{label}</span>
     </button>
 );
 

@@ -61,7 +61,7 @@ const OfferPopup: React.FC = () => {
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         onClick={handleOpen}
-                        className="fixed bottom-4 left-4 z-40 bg-lava text-white px-4 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-red-700 transition-colors"
+                        className="fixed bottom-4 left-4 z-40 bg-white text-black px-4 py-3 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)] flex items-center gap-2 hover:bg-stone-200 transition-colors"
                     >
                         <Gift size={20} />
                         <span className="font-bold">
@@ -78,65 +78,65 @@ const OfferPopup: React.FC = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
                         onClick={handleClose}
                     >
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-white rounded-2xl overflow-hidden max-w-md w-full shadow-2xl relative"
+                            className="bg-[#111] border border-white/10 rounded-3xl overflow-hidden max-w-md w-full shadow-2xl relative"
                             onClick={e => e.stopPropagation()}
                         >
                             {/* Offer Counter */}
                             {offers.length > 1 && (
-                                <div className="absolute top-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full z-10">
+                                <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-white border border-white/10 text-xs px-3 py-1.5 rounded-full z-10 font-bold tracking-widest">
                                     {currentIndex + 1} / {offers.length}
                                 </div>
                             )}
 
                             {currentOffer.imageUrl && (
-                                <div className="h-48 w-full bg-gray-200">
-                                    <img src={currentOffer.imageUrl} alt={currentOffer.title} className="w-full h-full object-cover" />
+                                <div className="h-48 w-full bg-[#1a1a1a]">
+                                    <img src={currentOffer.imageUrl} alt={currentOffer.title} className="w-full h-full object-cover opacity-80" />
                                 </div>
                             )}
 
-                            <div className="p-6 text-center">
-                                <h2 className="text-3xl font-heading font-extrabold text-lava mb-2">
+                            <div className="p-8 text-center text-stone-200">
+                                <h2 className="text-3xl font-heading font-extrabold text-white mb-2">
                                     {language === 'en' ? currentOffer.title : currentOffer.titleAr}
                                 </h2>
-                                <p className="text-gray-600 mb-4">
+                                <p className="text-stone-400 mb-6 font-medium">
                                     {language === 'en' ? currentOffer.description : currentOffer.descriptionAr}
                                 </p>
 
                                 {currentOffer.price && (
-                                    <div className="text-2xl font-bold bg-gray-50 py-2 rounded-lg mb-4">
+                                    <div className="text-2xl font-bold bg-[#1a1a1a] border border-white/5 py-3 rounded-xl mb-6 shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] text-white">
                                         {formatPrice(currentOffer.price, currency, exchangeRate)}
                                     </div>
                                 )}
 
                                 {/* Navigation Buttons for Multiple Offers */}
                                 {offers.length > 1 && (
-                                    <div className="flex items-center justify-center gap-4 mb-4">
+                                    <div className="flex items-center justify-center gap-6 mb-6">
                                         <button
                                             onClick={prevOffer}
-                                            className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+                                            className="p-3 bg-[#1a1a1a] hover:bg-white/10 border border-white/5 rounded-full transition-colors text-stone-300 hover:text-white"
                                         >
                                             <ChevronLeft size={24} />
                                         </button>
-                                        <div className="flex gap-1">
+                                        <div className="flex gap-2">
                                             {offers.map((_, i) => (
                                                 <button
                                                     key={i}
                                                     onClick={() => setCurrentIndex(i)}
-                                                    className={`w-2 h-2 rounded-full transition-colors ${i === currentIndex ? 'bg-lava' : 'bg-gray-300'
+                                                    className={`w-2.5 h-2.5 rounded-full transition-all ${i === currentIndex ? 'bg-white w-6' : 'bg-stone-700 hover:bg-stone-500'
                                                         }`}
                                                 />
                                             ))}
                                         </div>
                                         <button
                                             onClick={nextOffer}
-                                            className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+                                            className="p-3 bg-[#1a1a1a] hover:bg-white/10 border border-white/5 rounded-full transition-colors text-stone-300 hover:text-white"
                                         >
                                             <ChevronRight size={24} />
                                         </button>
@@ -145,7 +145,7 @@ const OfferPopup: React.FC = () => {
 
                                 <button
                                     onClick={handleClose}
-                                    className="w-full bg-lava text-white py-3 rounded-xl font-bold hover:bg-red-700 transition-colors"
+                                    className="w-full bg-white text-black py-4 rounded-xl font-bold hover:bg-stone-200 transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] text-lg"
                                 >
                                     {language === 'en' ? 'View Menu' : 'عرض القائمة'}
                                 </button>
@@ -154,9 +154,9 @@ const OfferPopup: React.FC = () => {
                             {/* Close X */}
                             <button
                                 onClick={handleClose}
-                                className="absolute top-3 right-3 bg-white/90 hover:bg-white text-gray-700 rounded-full p-2 shadow-md"
+                                className="absolute top-4 right-4 bg-black/60 backdrop-blur-md hover:bg-white hover:text-black border border-white/10 text-white rounded-full p-2 shadow-md transition-colors z-10"
                             >
-                                <X size={18} />
+                                <X size={20} />
                             </button>
                         </motion.div>
                     </motion.div>

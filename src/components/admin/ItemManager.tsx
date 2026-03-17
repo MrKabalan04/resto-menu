@@ -154,18 +154,18 @@ const ItemManager: React.FC = () => {
     const getCategoryName = (catId: string) => categories.find(c => c._id === catId)?.name || 'Unknown';
 
     return (
-        <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-bold mb-6">Manage Menu Items</h2>
+        <div className="bg-[#111] border border-white/5 rounded-2xl shadow-sm p-4 md:p-6 w-full overflow-hidden text-stone-200">
+            <h2 className="text-xl font-bold mb-6 text-white">Manage Menu Items</h2>
 
             {editingId && (
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r-lg flex justify-between items-center shadow-sm">
+                <div className="bg-blue-950/30 border-l-4 border-blue-500 p-4 mb-6 rounded-r-lg flex flex-col sm:flex-row justify-between sm:items-center gap-4 shadow-sm">
                     <div>
-                        <p className="text-blue-700 font-bold">You are currently editing:</p>
-                        <p className="text-blue-900 text-lg">"{form.name}"</p>
+                        <p className="text-blue-400 font-bold">You are currently editing:</p>
+                        <p className="text-blue-200 text-lg">"{form.name}"</p>
                     </div>
                     <button
                         onClick={() => { setEditingId(null); setForm({ categoryId: '', name: '', nameAr: '', description: '', descriptionAr: '', price: '', priceCurrency: 'USD', isAvailable: true }); }}
-                        className="text-blue-500 hover:text-blue-700 font-medium bg-white px-3 py-1 rounded-md border border-blue-200"
+                        className="text-blue-400 hover:text-blue-300 font-medium bg-[#1a1a1a] px-4 py-2 rounded-lg border border-blue-500/30 w-full sm:w-auto text-center"
                     >
                         Cancel Edit
                     </button>
@@ -173,13 +173,13 @@ const ItemManager: React.FC = () => {
             )}
 
             {/* Form */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl mb-8 border border-gray-200">
-                <h3 className="font-semibold text-gray-700 mb-4">{editingId ? '✏️ Edit Item' : '➕ Add New Item'}</h3>
+            <div className="bg-[#1a1a1a] p-4 md:p-6 rounded-2xl mb-8 border border-white/5 overflow-hidden w-full">
+                <h3 className="font-semibold text-stone-300 mb-4">{editingId ? '✏️ Edit Item' : '➕ Add New Item'}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="text-sm font-bold text-gray-700 mb-1 block">Category *</label>
+                        <label className="text-sm font-bold text-stone-400 mb-1 block">Category *</label>
                         <select
-                            className="w-full p-3 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 rounded-lg bg-[#111] text-white focus:ring-1 focus:ring-white focus:border-white outline-none transition-all"
                             value={form.categoryId}
                             onChange={e => setForm({ ...form, categoryId: e.target.value })}
                         >
@@ -189,12 +189,12 @@ const ItemManager: React.FC = () => {
                     </div>
                     <div className="flex gap-2">
                         <div className="flex-1">
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">Price</label>
+                            <label className="text-sm font-bold text-stone-400 mb-1 block">Price</label>
                             <input
                                 type="number"
                                 step="0.01"
                                 min="0"
-                                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent"
+                                className="w-full p-3 border border-stone-800 rounded-lg bg-[#111] text-white focus:ring-1 focus:ring-white focus:border-white outline-none transition-all"
                                 value={form.price}
                                 onChange={e => {
                                     const val = e.target.value;
@@ -203,9 +203,9 @@ const ItemManager: React.FC = () => {
                             />
                         </div>
                         <div className="w-24">
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">Currency</label>
+                            <label className="text-sm font-bold text-stone-400 mb-1 block">Currency</label>
                             <select
-                                className="w-full p-3 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-lava focus:border-transparent"
+                                className="w-full p-3 border border-stone-800 rounded-lg bg-[#111] text-white focus:ring-1 focus:ring-white focus:border-white outline-none transition-all"
                                 value={form.priceCurrency}
                                 onChange={e => setForm({ ...form, priceCurrency: e.target.value as 'USD' | 'LBP' })}
                             >
@@ -216,36 +216,34 @@ const ItemManager: React.FC = () => {
                     </div>
 
                     <div>
-                        <label className="text-sm font-bold text-gray-700 mb-1 block">Name (English) *</label>
+                        <label className="text-sm font-bold text-stone-400 mb-1 block">Name (English) *</label>
                         <input
-                            placeholder="e.g. Classic Burger"
-                            className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 rounded-lg bg-[#111] text-white focus:ring-1 focus:ring-white focus:border-white outline-none transition-all"
                             value={form.name}
                             onChange={e => setForm({ ...form, name: e.target.value })}
                         />
                     </div>
                     <div>
-                        <label className="text-sm font-bold text-gray-700 mb-1 block">Name (Arabic)</label>
+                        <label className="text-sm font-bold text-stone-400 mb-1 block">Name (Arabic)</label>
                         <input
-                            placeholder="مثال: برغر كلاسيك"
-                            className="w-full p-3 border border-gray-200 rounded-lg text-right focus:ring-2 focus:ring-lava focus:border-transparent"
+                            className="w-full p-3 border border-stone-800 rounded-lg bg-[#111] text-white text-right focus:ring-1 focus:ring-white focus:border-white outline-none transition-all"
                             dir="rtl"
                             value={form.nameAr}
                             onChange={e => setForm({ ...form, nameAr: e.target.value })}
                         />
                     </div>
 
-                    <div className="md:col-span-2 grid grid-cols-2 gap-4">
+                    <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <textarea
                             placeholder="Description (English)"
-                            className="p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-lava focus:border-transparent resize-none"
+                            className="w-full p-3 border border-stone-800 rounded-lg bg-[#111] text-white focus:ring-1 focus:ring-white focus:border-white outline-none transition-all resize-none"
                             rows={2}
                             value={form.description}
                             onChange={e => setForm({ ...form, description: e.target.value })}
                         />
                         <textarea
                             placeholder="وصف بالعربي"
-                            className="p-3 border border-gray-200 rounded-lg text-right focus:ring-2 focus:ring-lava focus:border-transparent resize-none"
+                            className="w-full p-3 border border-stone-800 rounded-lg bg-[#111] text-white text-right focus:ring-1 focus:ring-white focus:border-white outline-none transition-all resize-none"
                             dir="rtl"
                             rows={2}
                             value={form.descriptionAr}
@@ -254,23 +252,23 @@ const ItemManager: React.FC = () => {
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="flex items-center gap-2 cursor-pointer bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
+                        <label className="flex items-center gap-3 cursor-pointer bg-[#111] p-4 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
                             <input
                                 type="checkbox"
                                 checked={form.isAvailable}
                                 onChange={e => setForm({ ...form, isAvailable: e.target.checked })}
-                                className="w-5 h-5 accent-lava"
+                                className="w-5 h-5 rounded accent-white"
                             />
-                            <span className="font-bold text-gray-700 text-sm">Item is Available (Visible on menu)</span>
+                            <span className="font-bold text-stone-300 text-sm">Item is Available (Visible on menu)</span>
                         </label>
                     </div>
                 </div>
 
-                <div className="flex justify-end gap-3">
+                <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
                     {editingId && (
                         <button
                             onClick={() => { setEditingId(null); setForm({ categoryId: '', name: '', nameAr: '', description: '', descriptionAr: '', price: '', priceCurrency: 'USD', isAvailable: true }); }}
-                            className="px-5 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg transition-colors"
+                            className="w-full sm:w-auto px-6 py-2.5 text-stone-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors font-bold border border-transparent hover:border-white/10"
                         >
                             Cancel
                         </button>
@@ -278,7 +276,7 @@ const ItemManager: React.FC = () => {
                     <button
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="bg-lava text-white px-6 py-2.5 rounded-lg font-bold hover:bg-red-700 transition-colors disabled:opacity-50"
+                        className="w-full sm:w-auto bg-white text-black px-8 py-2.5 rounded-lg font-bold hover:bg-stone-200 transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                     >
                         {editingId ? 'Update Item' : 'Add Item'}
                     </button>
@@ -286,14 +284,14 @@ const ItemManager: React.FC = () => {
             </div>
 
             {/* Category Filter */}
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-                <span className="text-sm font-medium text-gray-600">Filter:</span>
+            <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
+                <span className="text-sm font-bold text-stone-500 uppercase tracking-widest whitespace-nowrap">Filter By:</span>
                 <div className="flex flex-wrap gap-2">
                     <button
                         onClick={() => setSelectedCategory('all')}
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedCategory === 'all'
-                            ? 'bg-lava text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        className={`px-4 py-2 rounded-full text-sm font-bold transition-all border ${selectedCategory === 'all'
+                            ? 'bg-white text-black border-white shadow-[0_0_10px_rgba(255,255,255,0.2)]'
+                            : 'bg-[#1a1a1a] text-stone-400 border-white/5 hover:bg-[#222]'
                             }`}
                     >
                         All ({items.length})
@@ -304,9 +302,9 @@ const ItemManager: React.FC = () => {
                             <button
                                 key={c._id}
                                 onClick={() => setSelectedCategory(c._id)}
-                                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedCategory === c._id
-                                    ? 'bg-lava text-white'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                className={`px-4 py-2 rounded-full text-sm font-bold transition-all border ${selectedCategory === c._id
+                                    ? 'bg-white text-black border-white shadow-[0_0_10px_rgba(255,255,255,0.2)]'
+                                    : 'bg-[#1a1a1a] text-stone-400 border-white/5 hover:bg-[#222]'
                                     }`}
                             >
                                 {c.name} ({count})
@@ -321,34 +319,33 @@ const ItemManager: React.FC = () => {
                 {filteredItems.map(item => (
                     <div
                         key={item._id}
-                        className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow group"
+                        className="bg-[#1a1a1a] border border-white/5 rounded-2xl p-5 hover:border-white/20 transition-all flex flex-col"
                     >
-                        <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="flex-1 pr-4">
+                                <div className="mb-2">
+                                    <span className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 bg-white/10 text-stone-300 rounded-md">
                                         {getCategoryName(item.categoryId)}
                                     </span>
                                 </div>
-                                <h4 className="font-bold text-gray-900">{item.name}</h4>
-                                <p className="text-sm text-gray-500" dir="rtl">{item.nameAr}</p>
+                                <h4 className="font-bold text-white text-lg">{item.name}</h4>
+                                <p className="text-sm text-stone-400 font-ar mb-2" dir="rtl">{item.nameAr}</p>
                                 {item.description && (
-                                    <p className="text-xs text-gray-400 mt-1 line-clamp-1">{item.description}</p>
+                                    <p className="text-xs text-stone-500 line-clamp-2">{item.description}</p>
                                 )}
                             </div>
-                            <div className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded-lg font-bold text-sm">
-                                {item.priceCurrency === 'USD' ? <DollarSign size={14} /> : null}
-                                {item.price.toLocaleString()} {item.priceCurrency === 'LBP' ? 'LBP' : ''}
+                            <div className="flex flex-col items-end gap-2">
+                                <div className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg font-bold text-sm shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+                                    {item.priceCurrency === 'USD' ? <DollarSign size={14} /> : null}
+                                    {item.price.toLocaleString()} {item.priceCurrency === 'LBP' ? 'LBP' : ''}
+                                </div>
+                                <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-md ${item.isAvailable ? 'bg-white/10 text-white' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
+                                    {item.isAvailable ? 'Active' : 'Hidden'}
+                                </span>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2 mt-2">
-                            <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${item.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                {item.isAvailable ? 'Available' : 'Hidden'}
-                            </span>
-                        </div>
-
-                        <div className="flex justify-end gap-2 mt-3 pt-3 border-t border-gray-100 transition-opacity">
+                        <div className="mt-auto flex justify-between items-center pt-4 border-t border-white/5">
                             <button
                                 onClick={async () => {
                                     try {
@@ -367,32 +364,35 @@ const ItemManager: React.FC = () => {
                                         alert('Error toggling availability');
                                     }
                                 }}
-                                className={`flex items-center gap-1 px-3 py-1.5 text-sm transition-colors rounded-lg ${item.isAvailable ? 'text-gray-500 hover:bg-gray-100' : 'text-green-600 hover:bg-green-50'}`}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 text-sm transition-colors rounded-lg border ${item.isAvailable ? 'text-stone-400 border-white/5 hover:bg-white/5' : 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]'}`}
                                 title={item.isAvailable ? 'Hide Item' : 'Show Item'}
                             >
-                                {item.isAvailable ? <ToggleRight size={18} className="text-green-500" /> : <ToggleLeft size={18} />}
+                                {item.isAvailable ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
                                 {item.isAvailable ? 'Hide' : 'Show'}
                             </button>
-                            <button
-                                onClick={() => handleEdit(item)}
-                                className="flex items-center gap-1 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            >
-                                <Edit2 size={14} /> Edit
-                            </button>
-                            <button
-                                onClick={() => handleDelete(item._id)}
-                                className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            >
-                                <Trash2 size={14} /> Delete
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => handleEdit(item)}
+                                    className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-400 bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 rounded-lg transition-colors"
+                                >
+                                    <Edit2 size={14} /> Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(item._id)}
+                                    className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-red-400 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-lg transition-colors"
+                                >
+                                    <Trash2 size={14} /> Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
 
             {filteredItems.length === 0 && (
-                <div className="text-center py-12 text-gray-400">
-                    No items found in this category
+                <div className="text-center py-16 text-stone-600 bg-[#1a1a1a] rounded-2xl border border-white/5 mt-4 flex flex-col items-center">
+                    <span className="text-4xl mb-4 opacity-50">🍽️</span>
+                    <span className="font-bold tracking-wide">No items found in this section.</span>
                 </div>
             )}
         </div>
